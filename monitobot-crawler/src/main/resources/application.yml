@@ -1,0 +1,17 @@
+quarkus:
+  devservices:
+    enabled: true
+  flyway:
+    migrate-at-start: true
+  logging.level: DEBUG
+  hibernate-orm:
+    log:
+      sql: true
+    database:
+      generation: none
+monitobot:
+  search:
+    google:
+      base-url: https://content-customsearch.googleapis.com/customsearch/v1
+      custom-search-engine-id: #
+      api-key: #

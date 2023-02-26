@@ -10,11 +10,6 @@ repositories {
 
 dependencies {
     implementation 'io.quarkiverse.hibernatetypes:quarkus-hibernate-types:1.0.1'
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-    implementation group: 'com.sun.xml.bind', name: 'jaxb-ri', version: '4.0.2', ext: 'pom'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
-//    implementation 'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.14.2'
-//    implementation 'com.fasterxml.jackson.module:jackson-module-jakarta-xmlbind-annotations:2.14.2'
     implementation 'io.quarkus:quarkus-flyway'
     implementation 'io.quarkus:quarkus-jdbc-postgresql'
     implementation 'io.quarkus:quarkus-hibernate-orm-panache'
@@ -25,8 +20,10 @@ dependencies {
     implementation 'io.quarkus:quarkus-arc'
     implementation 'io.quarkus:quarkus-resteasy-reactive'
     testImplementation 'io.quarkus:quarkus-junit5'
+    testImplementation 'io.quarkus:quarkus-junit5-mockito'
     testImplementation 'io.rest-assured:rest-assured'
     testImplementation 'com.github.tomakehurst:wiremock:2.27.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.1.1'
 }
 
 group 'com.monitobot'

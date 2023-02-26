@@ -1,6 +1,6 @@
 insert into tracks ( id, public_id, created_on_utc, last_run_on_utc, search_criteria )
 values (
-    1,
+    nextval('sq_tracks_id'),
     'existing-track',
     '2023-01-01T00:00:00',
     '2023-02-05T00:00:00',
@@ -9,7 +9,7 @@ values (
 
 insert into search_results ( id, track_id, search_engine, created_on_utc, status_code, raw_data)
 values (
-    2,
+    nextval('sq_search_results_id'),
     1,
     'google',
     '2023-02-06T00:00:00',
@@ -17,7 +17,7 @@ values (
     '{ "error": "some error, don''t know what" }'
 ),
 (
-    1,
+    nextval('sq_search_results_id'),
     1,
     'google',
     '2023-02-06T00:00:00',

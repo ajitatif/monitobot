@@ -1,10 +1,8 @@
 package com.monitobot.search;
 
-import io.quarkiverse.hibernate.types.json.JsonType;
 import io.quarkiverse.hibernate.types.json.JsonTypes;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +12,6 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "tracks")
-@TypeDef(name = JsonTypes.JSON_BIN, typeClass = JsonType.class)
 public class TrackEntity extends PanacheEntityBase {
 
     @Id
@@ -27,7 +24,8 @@ public class TrackEntity extends PanacheEntityBase {
     public LocalDateTime createdOnUtc;
     @Column(name = "last_run_on_utc")
     public LocalDateTime lastRunOnUtc;
-    @Type(type = JsonTypes.JSON_BIN)
-    @Column(name = "search_criteria")
+    @Type(type = JsonTypes.JSON)
+    @Column(name = "search_criteria", columnDefinition = JsonTypes.JSON_BIN)
+    @Convert(disableConversion = true)
     public SearchCriteria searchCriteria;
 }

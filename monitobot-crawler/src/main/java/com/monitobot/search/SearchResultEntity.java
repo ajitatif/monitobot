@@ -1,7 +1,9 @@
 package com.monitobot.search;
 
 import io.quarkiverse.hibernate.types.json.JsonType;
+import io.quarkiverse.hibernate.types.json.JsonTypes;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;

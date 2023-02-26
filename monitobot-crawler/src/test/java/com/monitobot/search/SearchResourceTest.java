@@ -1,22 +1,45 @@
 package com.monitobot.search;
 
-import com.github.tomakehurst.wiremock.client.WireMock;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.monitobot.http.HttpRequestHandler;
 import com.monitobot.search.google.GoogleSearchResult;
 import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
+import org.mockito.Mockito;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.okJson;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
+import javax.inject.Inject;
+import java.time.LocalDateTime;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 /**
  * @author Gökalp Gürbüzer (gokalp.gurbuzer@gmail.com)
  */
 @QuarkusTest
 class SearchResourceTest {
+
+    @InjectMock
+    HttpRequestHandler httpRequestHandler;
+
+    @Inject
+    ObjectMapper objectMapper;
+
+    @BeforeEach
+    void setUp() {
+        Mockito.when(httpRequestHandler.handleSearchRequest(ArgumentMatchers.any(), ArgumentMatchers.any(), ArgumentMatchers.any()))
+                .then(invocation -> new InternetSearchResult(
+                        invocation.getArgument(1),
+                        LocalDateTime.now(),
+                        200,
+                        googleSearchResult,
+                        objectMapper.readValue(googleSearchResult, GoogleSearchResult.class)
+                ));
+    }
 
     @Test
     void shouldReturnAllResultsWhenNewTrack() {
@@ -31,9 +54,15 @@ class SearchResourceTest {
     @Test
     void shouldReturnNewResultsWhenExistingTrack() {
 
+        given()
+                .when().get("v1/search/tracks/existing-track/new-results")
+                .then()
+                .statusCode(200)
+                .extract().response().peek().then()
+                .body("results.google.result.items[0].title", equalTo("M7.8 and M7.5 Kahramanmaraş Earthquake Sequence near ..."));
+    }
 
-        stubFor(WireMock.get("https://content-customsearch.googleapis.com/customsearch/v1").willReturn(
-                okJson("""
+    private static final String googleSearchResult = """
                                 {
                                   "kind": "customsearch#search",
                                   "url": {
@@ -143,19 +172,8 @@ class SearchResourceTest {
                                           }
                                         ]
                                       }
-                                    },
-                                """)
-        ));
-
-        TrackResult trackResult = given()
-                .when().get("/tracks/existing-track/new-results")
-                .then()
-                .statusCode(200)
-                .extract().body().as(TrackResult.class);
-
-        assertNotNull(trackResult.results().get("google"));
-        GoogleSearchResult googleSearchResult = (GoogleSearchResult) trackResult.results().get("google").result();
-        assertEquals(2, googleSearchResult.items().size());
-        assertEquals("M7.8 and M7.5 Kahramanmaraş Earthquake Sequence near ...", googleSearchResult.items().get(1).title());
-    }
+                                    }
+                                  ]
+                                },
+                                """;
 }

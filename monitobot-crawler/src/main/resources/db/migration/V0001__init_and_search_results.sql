@@ -14,7 +14,7 @@ create table search_results (
     search_engine varchar(15) not null,
     created_on_utc timestamp without time zone not null,
     status_code smallint,
-    raw_data json null
+    raw_data text null
 );
 create sequence sq_search_results_id start with 1 increment by 1;
 create index ix_search_results_tracks_id on search_results(track_id);

@@ -13,5 +13,5 @@ monitobot:
   search:
     google:
       base-url: https://content-customsearch.googleapis.com/customsearch/v1
-      custom-search-engine-id: #
-      api-key: #
+      custom-search-engine-id: c1bc1d7ac0422409b
+      api-key: AIzaSyBG5icsZxdNMEHtmZpEmQLGnZMphxOg_JI
